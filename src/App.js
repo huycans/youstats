@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import Spinner from 'react-bootstrap/Spinner';
 
 import { verifyToken } from "./components/auth";
@@ -41,10 +41,22 @@ function App() {
     dispatch(signInSuccess({ tokenId, profileObj, tokenObj }));
   };
 
+  const handleSignout = () => {
+    setLoading(true);
+    resetState();
+    setLoading(false);
+  };
   return (
     <div className="App">
       <header className="App-header container">
         Header
+        {signedin ?
+          <GoogleLogout
+            clientId={process.env.REACT_APP_CLIENTID}
+            buttonText="Sign out"
+            onLogoutSuccess={handleSignout}
+          >
+          </GoogleLogout> : null}
       </header>
       <main className="container">
         <h1> Main content</h1>
@@ -56,7 +68,7 @@ function App() {
           </div>
           : null
         }
-        {signedin ? `Your token is ${googleToken}` :
+        {signedin ? `You are signed in` :
           <GoogleLogin
             clientId={process.env.REACT_APP_CLIENTID}
             buttonText="Sign in with Google"
@@ -64,6 +76,7 @@ function App() {
             onFailure={handleSignin}
             cookiePolicy={'single_host_origin'}
             isSignedIn={true}
+            onAutoLoadFinished={() => setLoading(false)}
           />}
 
       </main>
