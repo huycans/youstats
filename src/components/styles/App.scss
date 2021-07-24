@@ -1,6 +1,12 @@
 @import "custom";
 @import "spinner";
 
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .signout-btn {
   background: white;
   border: none;
