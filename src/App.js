@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 import { verifyToken } from "./components/auth";
 import { signInSuccess, resetAuth } from './components/slices/auth';
+import NavigationBar from './components/NavigationBar';
 
 import './components/styles/App.scss';
 
@@ -48,16 +49,7 @@ function App() {
   };
   return (
     <div className="App">
-      <header className="App-header container">
-        Header
-        {signedin ?
-          <GoogleLogout
-            clientId={process.env.REACT_APP_CLIENTID}
-            buttonText="Sign out"
-            onLogoutSuccess={handleSignout}
-          >
-          </GoogleLogout> : null}
-      </header>
+      <NavigationBar signedin={signedin} handleSignout={handleSignout}></NavigationBar>
       <main className="container">
         <h1> Main content</h1>
         {loading ?
