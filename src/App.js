@@ -6,13 +6,19 @@ import { verifyToken } from "./components/auth";
 import { signInSuccess, resetAuth } from './components/slices/auth';
 
 function App() {
+  const dispatch = useDispatch();
 
   //states of the app
   // loading state
   let [signedin, setSignedin] = useState(false);
-  // let [googleToken, setGoogleToken] = useState("");
+  let [loading, setLoading] = useState(() => {
+    //check if there's already google auth object in cookie and set loading accordingly
+    if (document.cookie.indexOf("G_AUTHUSER_H") != -1) {
+      return true;
+    }
+    return false;
+  });
   let googleToken = useSelector(state => state.auth.tokenId);
-  const dispatch = useDispatch();
 
   /**
    * Reset all the states in the app to default values and remove any token in localstorage
@@ -21,7 +27,6 @@ function App() {
   const resetState = () => {
     setSignedin(false);
     dispatch(resetAuth);
-    localStorage.removeItem("google_tokenID");
   };
 
   // useEffect(() => {
@@ -45,12 +50,10 @@ function App() {
   //   signinCheck();
   // }, []);
 
-
   const handleSignin = (userProfile) => {
     console.log(userProfile);
 
-    //save the tokenId for client
-    localStorage.setItem("google_tokenID", userProfile.tokenId);
+    setLoading(false);
     const { tokenId, profileObj, tokenObj } = userProfile;
     setSignedin(true);
     dispatch(signInSuccess({ tokenId, profileObj, tokenObj }));
@@ -62,7 +65,10 @@ function App() {
         Header
       </header>
       <main>
-        <h1>Main content</h1>
+        <h1> Main content</h1>
+        {loading ? <h1>Please wait</h1> :
+          null
+        }
         {signedin ? `Your token is ${googleToken}` :
           <GoogleLogin
             clientId={process.env.REACT_APP_CLIENTID}
@@ -71,9 +77,7 @@ function App() {
             onFailure={handleSignin}
             cookiePolicy={'single_host_origin'}
             isSignedIn={true}
-          />
-
-        }
+          />}
 
       </main>
     </div>
