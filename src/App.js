@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-
-import logo from './logo.svg';
+import { useSelector, useDispatch } from 'react-redux';
 import './App.css';
 import { GoogleLogin } from 'react-google-login';
 import { verifyToken } from "./components/auth";
+import { signInSuccess, resetAuth } from './components/slices/auth';
 
 function App() {
 
   //states of the app
+  // loading state
   let [signedin, setSignedin] = useState(false);
-  let [googleToken, setGoogleToken] = useState("");
+  // let [googleToken, setGoogleToken] = useState("");
+  let googleToken = useSelector(state => state.auth.tokenId);
+  const dispatch = useDispatch();
 
   /**
    * Reset all the states in the app to default values and remove any token in localstorage
@@ -17,30 +20,30 @@ function App() {
    */
   const resetState = () => {
     setSignedin(false);
-    setGoogleToken("");
+    dispatch(resetAuth);
     localStorage.removeItem("google_tokenID");
   };
 
-  useEffect(() => {
-    const signinCheck = async () => {
-      let google_tokenId = localStorage.getItem("google_tokenID");
-      if (google_tokenId) {
-        let isTokenValid = await verifyToken(google_tokenId);
-        if (isTokenValid) {
-          setSignedin(true);
-          setGoogleToken(google_tokenId);
-        }
-        else {
-          resetState();
-        }
-      }
-      else {
-        resetState();
-      }
+  // useEffect(() => {
+  //   const signinCheck = async () => {
+  //     let google_tokenId = localStorage.getItem("google_tokenID");
+  //     if (google_tokenId) {
+  //       let isTokenValid = await verifyToken(google_tokenId);
+  //       if (isTokenValid) {
+  //         setSignedin(true);
+  //         // dispatch(signInSuccess())
+  //       }
+  //       else {
+  //         resetState();
+  //       }
+  //     }
+  //     else {
+  //       resetState();
+  //     }
 
-    };
-    signinCheck();
-  }, []);
+  //   };
+  //   signinCheck();
+  // }, []);
 
 
   const handleSignin = (userProfile) => {
@@ -48,8 +51,9 @@ function App() {
 
     //save the tokenId for client
     localStorage.setItem("google_tokenID", userProfile.tokenId);
+    const { tokenId, profileObj, tokenObj } = userProfile;
     setSignedin(true);
-    setGoogleToken(userProfile.tokenId);
+    dispatch(signInSuccess({ tokenId, profileObj, tokenObj }));
   };
 
   return (
@@ -66,6 +70,7 @@ function App() {
             onSuccess={handleSignin}
             onFailure={handleSignin}
             cookiePolicy={'single_host_origin'}
+            isSignedIn={true}
           />
 
         }
