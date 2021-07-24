@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import './App.css';
 import { GoogleLogin } from 'react-google-login';
+import Spinner from 'react-bootstrap/Spinner';
+
 import { verifyToken } from "./components/auth";
 import { signInSuccess, resetAuth } from './components/slices/auth';
+
+import './components/styles/App.scss';
 
 function App() {
   const dispatch = useDispatch();
@@ -29,27 +32,6 @@ function App() {
     dispatch(resetAuth);
   };
 
-  // useEffect(() => {
-  //   const signinCheck = async () => {
-  //     let google_tokenId = localStorage.getItem("google_tokenID");
-  //     if (google_tokenId) {
-  //       let isTokenValid = await verifyToken(google_tokenId);
-  //       if (isTokenValid) {
-  //         setSignedin(true);
-  //         // dispatch(signInSuccess())
-  //       }
-  //       else {
-  //         resetState();
-  //       }
-  //     }
-  //     else {
-  //       resetState();
-  //     }
-
-  //   };
-  //   signinCheck();
-  // }, []);
-
   const handleSignin = (userProfile) => {
     console.log(userProfile);
 
@@ -61,13 +43,18 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <header className="App-header container">
         Header
       </header>
-      <main>
+      <main className="container">
         <h1> Main content</h1>
-        {loading ? <h1>Please wait</h1> :
-          null
+        {loading ?
+          <div className="loading-spinner d-flex justify-content-center align-items-center">
+            <Spinner animation="border" variant="primary" aria-roledescription="loading spinner" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </div>
+          : null
         }
         {signedin ? `Your token is ${googleToken}` :
           <GoogleLogin
