@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   tokenId: "",
@@ -21,7 +21,6 @@ export const authSlice = createSlice({
       state.name = name;
       state.googleId = googleId;
       state.accessToken = accessToken;
-
     },
     resetAuth: (state) => {
       state = initialState;

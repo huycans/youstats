@@ -1,11 +1,12 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { youtubeAPI } from '../API/youtube';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { youtubeAPI } from "../API/youtube";
 const initialState = {
   channelResults: []
 };
 
 //action as thunk
-export const fetchYoutubeChannelsByKeyword = createAsyncThunk("youtube/fetchChannelsByKeyword",
+export const fetchYoutubeChannelsByKeyword = createAsyncThunk(
+  "youtube/fetchChannelsByKeyword",
   async (keyword, thunkAPI) => {
     return await youtubeAPI.fetchYoutubeChannelsByKeyword(keyword);
   }
@@ -14,13 +15,14 @@ export const fetchYoutubeChannelsByKeyword = createAsyncThunk("youtube/fetchChan
 export const youtubeSlice = createSlice({
   name: "youtube",
   initialState: initialState,
-  reducers: {
-
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchYoutubeChannelsByKeyword.fulfilled, (state, action) => {
-      state.channelResults = action.payload.items;
-    });
+    builder.addCase(
+      fetchYoutubeChannelsByKeyword.fulfilled,
+      (state, action) => {
+        state.channelResults = action.payload.items;
+      }
+    );
   }
 });
 

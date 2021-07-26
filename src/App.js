@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { GoogleLogin } from 'react-google-login';
-import Spinner from 'react-bootstrap/Spinner';
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { GoogleLogin } from "react-google-login";
+import Spinner from "react-bootstrap/Spinner";
 
 import { verifyToken } from "./components/API/auth";
-import { signInSuccess, resetAuth } from './components/slices/auth';
-import NavigationBar from './components/NavigationBar';
+import { signInSuccess, resetAuth } from "./components/slices/auth";
+import NavigationBar from "./components/NavigationBar";
 
-
-import './components/styles/App.scss';
+import "./components/styles/App.scss";
 import ChannelSearch from "./components/ChannelSearch";
 
 function App() {
   const dispatch = useDispatch();
 
   //selectors used
-  let googleToken = useSelector(state => state.auth.tokenId);
+  let googleToken = useSelector((state) => state.auth.tokenId);
 
   //states of the app
   // loading state
@@ -52,30 +51,39 @@ function App() {
     setLoading(false);
   };
 
-
   return (
     <div className="App">
-      <NavigationBar signedin={signedin} handleSignout={handleSignout}></NavigationBar>
+      <NavigationBar
+        signedin={signedin}
+        handleSignout={handleSignout}
+      ></NavigationBar>
       <main className="container">
         <h1> Welcome to YouStats</h1>
-        {loading ?
+        {loading ? (
           <div className="loading-spinner d-flex justify-content-center align-items-center">
-            <Spinner animation="border" variant="primary" aria-roledescription="loading spinner" role="status">
+            <Spinner
+              animation="border"
+              variant="primary"
+              aria-roledescription="loading spinner"
+              role="status"
+            >
               <span className="visually-hidden">Loading...</span>
             </Spinner>
           </div>
-          : null
-        }
-        {signedin ? `You are signed in` :
+        ) : null}
+        {signedin ? (
+          `You are signed in`
+        ) : (
           <GoogleLogin
             clientId={process.env.REACT_APP_CLIENTID}
             buttonText="Sign in with Google"
             onSuccess={handleSignin}
             onFailure={handleSignin}
-            cookiePolicy={'single_host_origin'}
+            cookiePolicy={"single_host_origin"}
             isSignedIn={true}
             onAutoLoadFinished={() => setLoading(false)}
-          />}
+          />
+        )}
 
         <ChannelSearch />
       </main>
