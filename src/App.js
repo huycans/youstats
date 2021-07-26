@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import { GoogleLogin } from 'react-google-login';
 import Spinner from 'react-bootstrap/Spinner';
 
-import { verifyToken } from "./components/auth";
+import { verifyToken } from "./components/API/auth";
 import { signInSuccess, resetAuth } from './components/slices/auth';
 import NavigationBar from './components/NavigationBar';
 
+
 import './components/styles/App.scss';
+import ChannelSearch from "./components/ChannelSearch";
 
 function App() {
   const dispatch = useDispatch();
+
+  //selectors used
+  let googleToken = useSelector(state => state.auth.tokenId);
 
   //states of the app
   // loading state
@@ -22,7 +27,6 @@ function App() {
     }
     return false;
   });
-  let googleToken = useSelector(state => state.auth.tokenId);
 
   /**
    * Reset all the states in the app to default values and remove any token in localstorage
@@ -47,11 +51,13 @@ function App() {
     resetState();
     setLoading(false);
   };
+
+
   return (
     <div className="App">
       <NavigationBar signedin={signedin} handleSignout={handleSignout}></NavigationBar>
       <main className="container">
-        <h1> Main content</h1>
+        <h1> Welcome to YouStats</h1>
         {loading ?
           <div className="loading-spinner d-flex justify-content-center align-items-center">
             <Spinner animation="border" variant="primary" aria-roledescription="loading spinner" role="status">
@@ -71,6 +77,7 @@ function App() {
             onAutoLoadFinished={() => setLoading(false)}
           />}
 
+        <ChannelSearch />
       </main>
     </div>
   );
