@@ -8,11 +8,12 @@ import youtubeIcon from "../static/images/youtube-icon.png";
 
 export default function NavigationBar({ signedin, handleSignout }) {
   return (
-    <header className="App-header container">
-      <Navbar expand="md" bg="light" variant="light">
+    <header className="App-header container" data-testid="app-header">
+      <Navbar expand="md" bg="light" variant="light" data-testid="navbar">
         <Container>
-          <Navbar.Brand href="/">
+          <Navbar.Brand data-testid="navbar-brand" href="/">
             <img
+              data-testid="navbar-brand-img"
               alt="Youtube logo"
               src={youtubeIcon}
               width="40"
@@ -25,6 +26,7 @@ export default function NavigationBar({ signedin, handleSignout }) {
           <Navbar.Collapse
             className="justify-content-end"
             id="responsive-navbar-nav"
+            data-testid="navbar-collapse-content"
           >
             <Nav.Item>
               {signedin ? (
@@ -34,6 +36,7 @@ export default function NavigationBar({ signedin, handleSignout }) {
                   onLogoutSuccess={handleSignout}
                   render={(renderProps) => (
                     <button
+                      data-testid="navbar-item-logout-btn"
                       className="signout-btn"
                       onClick={renderProps.onClick}
                       disabled={renderProps.disabled}

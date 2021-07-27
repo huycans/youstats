@@ -37,16 +37,18 @@ export default function ChannelSearch() {
           {" "}
           Search for a channel by name: &nbsp;&nbsp;
           <input
+            data-testid="channel-search-input"
             id="channel-search-input"
             type="text"
             onChange={handleChange}
           />
         </label>
       </div>
-      <ul className="channel-results-lists">
-        {channelResults.map((result) => {
+      <ul className="channel-results-lists" data-testid="channel-result-lists">
+        {channelResults.map((result, index) => {
           return (
             <li
+              data-testid={"channel-result-items-" + index}
               className="container channel-results-item"
               key={result.id.channelId}
               onClick={(e) => handleChannelClick(e, result.id.channelId)}
@@ -54,12 +56,21 @@ export default function ChannelSearch() {
               <div className="row">
                 <div className="col-2">
                   <img
+                    className="channel-results-logo"
                     alt={result.snippet.thumbnails.title}
                     src={result.snippet.thumbnails.default.url}
+                    data-testid={
+                      "channel-result-items-" + index + "channel-results-logo"
+                    }
                   />
                 </div>
                 <div className="col-10">
-                  <div className="row channel-title">
+                  <div
+                    className="row channel-title"
+                    data-testid={
+                      "channel-result-items-" + index + "channel-title"
+                    }
+                  >
                     {result.snippet.channelTitle}
                   </div>
                   <div className="row channel-">

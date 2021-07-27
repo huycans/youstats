@@ -64,6 +64,7 @@ function App() {
         {loading ? (
           <div className="loading-spinner d-flex justify-content-center align-items-center">
             <Spinner
+              data-testid="loading-spinner"
               animation="border"
               variant="primary"
               aria-roledescription="loading spinner"
@@ -77,6 +78,7 @@ function App() {
           `You are signed in`
         ) : (
           <GoogleLogin
+            data-testid="google-login-btn"
             clientId={process.env.REACT_APP_CLIENTID}
             buttonText="Sign in with Google"
             onSuccess={handleSignin}
@@ -89,10 +91,12 @@ function App() {
 
         <ChannelSearch />
         {currentChannel.isEmpty ? null : (
-          <Card>
+          <Card data-testid="channel-info">
             <Card.Img variant="top" src={currentChannel.thumbnailBig} />
             <Card.Body>
-              <Card.Title>{currentChannel.title}</Card.Title>
+              <Card.Title data-testid="channel-info-title">
+                {currentChannel.title}
+              </Card.Title>
               <Card.Subtitle>
                 since {currentChannel.onYoutubeSince}
               </Card.Subtitle>
