@@ -9,12 +9,14 @@ import NavigationBar from "./components/NavigationBar";
 
 import "./components/styles/App.scss";
 import ChannelSearch from "./components/ChannelSearch";
+import { Card, ListGroup } from "react-bootstrap";
 
 function App() {
   const dispatch = useDispatch();
 
   //selectors used
   let googleToken = useSelector((state) => state.auth.tokenId);
+  let currentChannel = useSelector((state) => state.youtube.currentChannel);
 
   //states of the app
   // loading state
@@ -86,6 +88,29 @@ function App() {
         )}
 
         <ChannelSearch />
+        {currentChannel.isEmpty ? null : (
+          <Card>
+            <Card.Img variant="top" src={currentChannel.thumbnailBig} />
+            <Card.Body>
+              <Card.Title>{currentChannel.title}</Card.Title>
+              <Card.Subtitle>
+                since {currentChannel.onYoutubeSince}
+              </Card.Subtitle>
+              <ListGroup variant="flush">
+                <ListGroup.Item>from {currentChannel.country}</ListGroup.Item>
+                <ListGroup.Item>
+                  View count: {currentChannel.viewCount}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  Video count: {currentChannel.videoCount}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  Subscriber count: {currentChannel.subscriberCount}
+                </ListGroup.Item>
+              </ListGroup>
+            </Card.Body>
+          </Card>
+        )}
       </main>
     </div>
   );

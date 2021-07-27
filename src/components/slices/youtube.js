@@ -1,14 +1,46 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import * as _ from "lodash";
 import { youtubeAPI } from "../API/youtube";
+
 const initialState = {
-  channelResults: []
+  channelResults: [],
+  currentChannel: {
+    isEmpty: true,
+    title: "",
+    description: "",
+    thumbnail: "",
+    onYoutubeSince: "",
+    country: "",
+    uploads: "",
+    viewCount: "",
+    subscriberCount: "",
+    videoCount: "",
+    topics: [],
+    kidsFriendly: false,
+    bannerURL: ""
+  }
 };
 
-//action as thunk
+//thunk action
 export const fetchYoutubeChannelsByKeyword = createAsyncThunk(
-  "youtube/fetchChannelsByKeyword",
+  "youtube/fetchYoutubeChannelsByKeyword",
   async (keyword, thunkAPI) => {
-    return await youtubeAPI.fetchYoutubeChannelsByKeyword(keyword);
+    try {
+      return await youtubeAPI.fetchYoutubeChannelsByKeyword(keyword);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const fetchYoutubeChannelInfo = createAsyncThunk(
+  "youtube/fetchYoutubeChannelInfo",
+  async (channelName, thunkAPI) => {
+    try {
+      return await youtubeAPI.fetchYoutubeChannelInfo(channelName);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
   }
 );
 
@@ -17,12 +49,50 @@ export const youtubeSlice = createSlice({
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(
-      fetchYoutubeChannelsByKeyword.fulfilled,
-      (state, action) => {
+    builder
+      .addCase(fetchYoutubeChannelsByKeyword.fulfilled, (state, action) => {
         state.channelResults = action.payload.items;
-      }
-    );
+      })
+      .addCase(fetchYoutubeChannelInfo.pending, (state, action) => {
+        console.log("fetchYoutubeChannelInfo is pending");
+      })
+      .addCase(fetchYoutubeChannelInfo.rejected, (state, action) => {
+        console.log("fetchYoutubeChannelInfo is rejected");
+      })
+      .addCase(fetchYoutubeChannelInfo.fulfilled, (state, action) => {
+        console.log(action.payload);
+        const resultObj = action.payload.items[0];
+
+        const getPropertyFromObjectCurried = function (obj, defaultValue) {
+          //this util function check if an object has the given path, if yes return the value of that path
+          //using curried function to define an obj and a default value first
+          //then return another function that will receive a path
+          //finally return the value of that path inside the obj
+          return function (path) {
+            return _.get(obj, path, defaultValue);
+          };
+        };
+        const getPropertyAtPath = getPropertyFromObjectCurried(resultObj, "");
+
+        state.currentChannel = {
+          isEmpty: false,
+          title: getPropertyAtPath("snippet.title"),
+          description: getPropertyAtPath("snippet.description"),
+          thumbnailDefault: getPropertyAtPath("snippet.thumbnails.default.url"),
+          thumbnailBig: getPropertyAtPath("snippet.thumbnails.high.url"),
+          onYoutubeSince: getPropertyAtPath("snippet.publishedAt"),
+          country: getPropertyAtPath("snippet.country"),
+          uploads: getPropertyAtPath("contentDetails.relatedPlaylists.uploads"),
+          viewCount: getPropertyAtPath("statistics.viewCount"),
+          subscriberCount: getPropertyAtPath("statistics.subscriberCount"),
+          videoCount: getPropertyAtPath("statistics.videoCount"),
+          topics: getPropertyAtPath("topicDetails.topicIds"),
+          kidsFriendly: getPropertyAtPath("status.madeForKids"),
+          bannerURL: getPropertyAtPath(
+            "brandingSettings.image.bannerExternalUrl"
+          )
+        };
+      });
   }
 });
 

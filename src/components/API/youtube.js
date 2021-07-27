@@ -13,4 +13,22 @@ const fetchYoutubeChannelsByKeyword = async (keyword) => {
   return await response.json();
 };
 
-export const youtubeAPI = { fetchYoutubeChannelsByKeyword };
+const fetchYoutubeChannelInfo = async (channelId) => {
+  const MAX_RESULT = 1;
+  const params = `?part=snippet%2CbrandingSettings%2CcontentOwnerDetails%2Cid%2Clocalizations%2Cstatus%2CtopicDetails%2C%20contentDetails%2Cstatistics&id=${channelId}&maxResults=${MAX_RESULT}&key=${process.env.REACT_APP_API_KEY}`;
+  const response = await fetch(
+    "https://youtube.googleapis.com/youtube/v3/channels" + params,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      }
+    }
+  );
+  return await response.json();
+};
+
+export const youtubeAPI = {
+  fetchYoutubeChannelsByKeyword,
+  fetchYoutubeChannelInfo
+};

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchYoutubeChannelsByKeyword } from "./slices/youtube";
+import {
+  fetchYoutubeChannelsByKeyword,
+  fetchYoutubeChannelInfo
+} from "./slices/youtube";
 import { useDebounce } from "./utils";
 
 export default function ChannelSearch() {
@@ -23,8 +26,8 @@ export default function ChannelSearch() {
     setSearchTerm(event.target.value);
   };
 
-  const handleChannelClick = (e, channelTitle) => {
-    console.log("You choose ", channelTitle);
+  const handleChannelClick = (e, channelId) => {
+    dispatch(fetchYoutubeChannelInfo(channelId));
   };
 
   return (
@@ -46,9 +49,7 @@ export default function ChannelSearch() {
             <li
               className="container channel-results-item"
               key={result.id.channelId}
-              onClick={(e) =>
-                handleChannelClick(e, result.snippet.channelTitle)
-              }
+              onClick={(e) => handleChannelClick(e, result.id.channelId)}
             >
               <div className="row">
                 <div className="col-2">
