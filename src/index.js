@@ -7,6 +7,11 @@ import store from "./components/store";
 
 import reportWebVitals from "./reportWebVitals";
 
+if (process.env.NODE_ENV === "development") {
+  const { worker } = require("./mocks/browser");
+  worker.start();
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
