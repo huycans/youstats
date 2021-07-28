@@ -3,18 +3,24 @@ import renderer from "react-test-renderer";
 import ChannelSearch from "../components/ChannelSearch";
 import { Provider } from "react-redux";
 import store from "../components/store";
-import { render, cleanup, fireEvent } from "@testing-library/react";
-import { youtubeAPI } from "../components/API/youtube";
+import { render, cleanup, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
-jest.mock("../components/API/youtube");
+import { setupServer } from "msw/node";
 
-jest.mock("../components/utils.js", () => {
-  return {
-    useDebounce: (text) => {
-      return text;
-    }
-  };
-});
+import { handlers } from "../mocks/handlers";
+
+//mocking youtubeAPI calls using msw
+const server = setupServer(...handlers);
+
+// Enable API mocking before tests.
+beforeAll(() => server.listen());
+
+// Reset any runtime request handlers we may add during the tests.
+afterEach(() => server.resetHandlers());
+
+// Disable API mocking after the tests are done.
+afterAll(() => server.close());
 
 describe("<NavigationBar />", () => {
   let WrappedChannelSearch;
@@ -41,11 +47,11 @@ describe("<NavigationBar />", () => {
     expect(queryByTestId("channel-search-input")).toBeTruthy();
   });
 
-  it("renders two dummy items after user type on the input element", async () => {
+  it("renders two dummy search result after user types on the input element", async () => {
     const { queryByTestId, findAllByTestId } = render(<WrappedChannelSearch />);
     const input = queryByTestId("channel-search-input");
-    fireEvent.change(input, "random text");
-    // await new Promise(setImmediate);
+    await userEvent.type(input, "random text", { delay: 100 });
+
     let searchResults = await findAllByTestId("channel-result-items");
     expect(searchResults.length).toBe(2);
   });

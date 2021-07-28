@@ -4,9 +4,8 @@ import NavigationBar from "../components/NavigationBar";
 
 import { render, cleanup, fireEvent } from "@testing-library/react";
 
-// jest.mock("react-google-login", ({ render }) => {
-//   return { render };
-// });
+//module react-google-login is being mocked using jest
+
 const signedin = true;
 const handleSignout = jest.fn();
 describe("<NavigationBar />", () => {
