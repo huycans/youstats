@@ -17,8 +17,9 @@ export default function ChannelSearch() {
 
   //handle calling API when debouncedSearchTerm changes
   useEffect(() => {
-    if (debouncedSearchTerm.length > 1)
+    if (debouncedSearchTerm.length > 1) {
       dispatch(fetchYoutubeChannelsByKeyword(debouncedSearchTerm));
+    }
   }, [debouncedSearchTerm, dispatch]);
 
   //handle user typing
@@ -48,7 +49,7 @@ export default function ChannelSearch() {
         {channelResults.map((result, index) => {
           return (
             <li
-              data-testid={"channel-result-items-" + index}
+              data-testid="channel-result-items"
               className="container channel-results-item"
               key={result.id.channelId}
               onClick={(e) => handleChannelClick(e, result.id.channelId)}
@@ -59,17 +60,13 @@ export default function ChannelSearch() {
                     className="channel-results-logo"
                     alt={result.snippet.thumbnails.title}
                     src={result.snippet.thumbnails.default.url}
-                    data-testid={
-                      "channel-result-items-" + index + "channel-results-logo"
-                    }
+                    data-testid={"channel-result-items-logo"}
                   />
                 </div>
                 <div className="col-10">
                   <div
                     className="row channel-title"
-                    data-testid={
-                      "channel-result-items-" + index + "channel-title"
-                    }
+                    data-testid={"channel-result-items-title"}
                   >
                     {result.snippet.channelTitle}
                   </div>

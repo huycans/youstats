@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NavigationBar /> renders correctly 1`] = `
+Array [
+  <div
+    className="channel-search"
+  >
+    <label
+      htmlFor="channel-search-input"
+    >
+       
+      Search for a channel by name:   
+      <input
+        data-testid="channel-search-input"
+        id="channel-search-input"
+        onChange={[Function]}
+        type="text"
+      />
+    </label>
+  </div>,
+  <ul
+    className="channel-results-lists"
+    data-testid="channel-result-lists"
+  />,
+]
+`;
