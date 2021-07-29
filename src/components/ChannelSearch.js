@@ -8,6 +8,9 @@ import { useDebounce } from "./utils";
 
 export default function ChannelSearch() {
   const debouncedTime = 500;
+  const showChannelResults = useSelector(
+    (state) => state.youtube.showChannelResults
+  );
   const channelResults = useSelector((state) => state.youtube.channelResults);
   let [searchTerm, setSearchTerm] = useState("");
 
@@ -46,38 +49,40 @@ export default function ChannelSearch() {
         </label>
       </div>
       <ul className="channel-results-lists" data-testid="channel-result-lists">
-        {channelResults.map((result, index) => {
-          return (
-            <li
-              data-testid="channel-result-items"
-              className="container channel-results-item"
-              key={result.id.channelId}
-              onClick={(e) => handleChannelClick(e, result.id.channelId)}
-            >
-              <div className="row">
-                <div className="col-2">
-                  <img
-                    className="channel-results-logo"
-                    alt={result.snippet.thumbnails.title}
-                    src={result.snippet.thumbnails.default.url}
-                    data-testid={"channel-result-items-logo"}
-                  />
-                </div>
-                <div className="col-10">
-                  <div
-                    className="row channel-title"
-                    data-testid={"channel-result-items-title"}
-                  >
-                    {result.snippet.channelTitle}
+        {showChannelResults
+          ? channelResults.map((result, index) => {
+              return (
+                <li
+                  data-testid="channel-result-items"
+                  className="container channel-results-item"
+                  key={result.id.channelId}
+                  onClick={(e) => handleChannelClick(e, result.id.channelId)}
+                >
+                  <div className="row">
+                    <div className="col-2">
+                      <img
+                        className="channel-results-logo"
+                        alt={result.snippet.thumbnails.title}
+                        src={result.snippet.thumbnails.default.url}
+                        data-testid={"channel-result-items-logo"}
+                      />
+                    </div>
+                    <div className="col-10">
+                      <div
+                        className="row channel-title"
+                        data-testid={"channel-result-items-title"}
+                      >
+                        {result.snippet.channelTitle}
+                      </div>
+                      <div className="row channel-">
+                        {result.snippet.description.slice(0, 80) + "..."}
+                      </div>
+                    </div>
                   </div>
-                  <div className="row channel-">
-                    {result.snippet.description.slice(0, 80) + "..."}
-                  </div>
-                </div>
-              </div>
-            </li>
-          );
-        })}
+                </li>
+              );
+            })
+          : null}
       </ul>
     </>
   );

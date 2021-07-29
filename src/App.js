@@ -3,13 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { GoogleLogin } from "react-google-login";
 import Spinner from "react-bootstrap/Spinner";
 
-import { verifyToken } from "./components/API/auth";
 import { signInSuccess, resetAuth } from "./components/slices/auth";
 import NavigationBar from "./components/NavigationBar";
 
 import "./components/styles/App.scss";
 import ChannelSearch from "./components/ChannelSearch";
-import { Card, ListGroup } from "react-bootstrap";
+import ChannelInfo from "./components/ChannelInfo";
 
 function App() {
   const dispatch = useDispatch();
@@ -90,31 +89,8 @@ function App() {
         )}
 
         <ChannelSearch />
-        {currentChannel.isEmpty ? null : (
-          <Card data-testid="channel-info">
-            <Card.Img variant="top" src={currentChannel.thumbnailBig} />
-            <Card.Body>
-              <Card.Title data-testid="channel-info-title">
-                {currentChannel.title}
-              </Card.Title>
-              <Card.Subtitle>
-                since {currentChannel.onYoutubeSince}
-              </Card.Subtitle>
-              <ListGroup variant="flush">
-                <ListGroup.Item>from {currentChannel.country}</ListGroup.Item>
-                <ListGroup.Item>
-                  View count: {currentChannel.viewCount}
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  Video count: {currentChannel.videoCount}
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  Subscriber count: {currentChannel.subscriberCount}
-                </ListGroup.Item>
-              </ListGroup>
-            </Card.Body>
-          </Card>
-        )}
+        <ChannelInfo currentChannel={currentChannel} />
+        <h2>Lastest video</h2>
       </main>
     </div>
   );

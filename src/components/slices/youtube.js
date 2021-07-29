@@ -4,6 +4,7 @@ import { youtubeAPI } from "../API/youtube";
 
 const initialState = {
   channelResults: [],
+  showChannelResults: false,
   currentChannel: {
     isEmpty: true,
     title: "",
@@ -43,6 +44,7 @@ export const fetchYoutubeChannelInfo = createAsyncThunk(
     }
   }
 );
+//END thunk action
 
 export const youtubeSlice = createSlice({
   name: "youtube",
@@ -52,15 +54,9 @@ export const youtubeSlice = createSlice({
     builder
       .addCase(fetchYoutubeChannelsByKeyword.fulfilled, (state, action) => {
         state.channelResults = action.payload.items;
-      })
-      .addCase(fetchYoutubeChannelInfo.pending, (state, action) => {
-        console.log("fetchYoutubeChannelInfo is pending");
-      })
-      .addCase(fetchYoutubeChannelInfo.rejected, (state, action) => {
-        console.log("fetchYoutubeChannelInfo is rejected");
+        state.showChannelResults = true;
       })
       .addCase(fetchYoutubeChannelInfo.fulfilled, (state, action) => {
-        console.log(action.payload);
         const resultObj = action.payload.items[0];
 
         const getPropertyFromObjectCurried = function (obj, defaultValue) {
@@ -73,9 +69,10 @@ export const youtubeSlice = createSlice({
           };
         };
         const getPropertyAtPath = getPropertyFromObjectCurried(resultObj, "");
-
+        state.showChannelResults = false;
         state.currentChannel = {
           isEmpty: false,
+          channelId: getPropertyAtPath("id.channelId"),
           title: getPropertyAtPath("snippet.title"),
           description: getPropertyAtPath("snippet.description"),
           thumbnailDefault: getPropertyAtPath("snippet.thumbnails.default.url"),
@@ -86,7 +83,10 @@ export const youtubeSlice = createSlice({
           viewCount: getPropertyAtPath("statistics.viewCount"),
           subscriberCount: getPropertyAtPath("statistics.subscriberCount"),
           videoCount: getPropertyAtPath("statistics.videoCount"),
-          topics: getPropertyAtPath("topicDetails.topicIds"),
+          topics: getPropertyFromObjectCurried(
+            resultObj,
+            []
+          )("topicDetails.topicIds"),
           kidsFriendly: getPropertyAtPath("status.madeForKids"),
           bannerURL: getPropertyAtPath(
             "brandingSettings.image.bannerExternalUrl"
