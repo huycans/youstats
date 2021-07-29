@@ -1,7 +1,31 @@
 import React from "react";
 import { Image, Table } from "react-bootstrap";
+import countryCodes from "./lib/countryCodes.json";
+import topicList from "./lib/topicList.json";
 
 export default function ChannelInfo({ currentChannel }) {
+  const displayCount = (number) => {
+    return new Intl.NumberFormat().format(parseInt(number));
+  };
+  const displaySubCount = (number) => {
+    const subCount = parseInt(number);
+    if (subCount < 10 ** 3) {
+      return number;
+    } else if (subCount < 10 ** 6) {
+      return (subCount / 10 ** 3).toFixed(2) + "K";
+    } else if (subCount < 10 ** 9) {
+      return (subCount / 10 ** 6).toFixed(2) + "M";
+    }
+  };
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+  };
+  const convertTopicIdsToReadableNames = (topicArray) =>
+    topicArray.map((topic) => topicList[topic].name + "");
   const linkToYoutubeChannel = `https://www.youtube.com/channel/${currentChannel.channelId}`;
   return (
     <div className="container current-channel-info">
@@ -48,34 +72,45 @@ export default function ChannelInfo({ currentChannel }) {
                 <tbody>
                   <tr>
                     <td>On youtube since </td>
-                    <td>{currentChannel.onYoutubeSince} </td>
+                    <td>{formatDate(currentChannel.onYoutubeSince)} </td>
                   </tr>
                   <tr>
                     <td>Total viewcount </td>
-                    <td>{currentChannel.viewCount} </td>
+                    <td>{displayCount(currentChannel.viewCount)} </td>
                   </tr>
                   <tr>
                     <td>Total subscriber </td>
-                    <td>{currentChannel.subscriberCount} </td>
+                    <td>{displaySubCount(currentChannel.subscriberCount)} </td>
                   </tr>
                   <tr>
                     <td>Total videos uploaded </td>
-                    <td>{currentChannel.videoCount} </td>
+                    <td>{displayCount(currentChannel.videoCount)} </td>
                   </tr>
                   <tr>
                     <td>Base country </td>
-                    <td>{currentChannel.country} </td>
+                    <td>
+                      {
+                        countryCodes.find(
+                          (country) =>
+                            country["alpha-2"] === currentChannel.country
+                        ).name
+                      }
+                    </td>
                   </tr>
                   <tr>
                     <td>Is kids friendly? </td>
                     <td>{currentChannel.kidsFriendly ? "Yes" : "No"} </td>
                   </tr>
                   <tr>
-                    <td>Topics </td>
+                    <td>Top topics on this channel </td>
                     <td>
-                      {currentChannel.topics.map((topic) => (
-                        <span key={topic}>{topic}</span>
-                      ))}{" "}
+                      <ul className="topic-list">
+                        {convertTopicIdsToReadableNames(
+                          currentChannel.topics
+                        ).map((topic) => (
+                          <li className="topic-item">{topic}</li>
+                        ))}
+                      </ul>
                     </td>
                   </tr>
                 </tbody>
