@@ -1,9 +1,12 @@
 import React from "react";
 import { Image, Table } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import EmbedYoutubeVideo from "./EmbedYoutubeVideo";
 import countryCodes from "./lib/countryCodes.json";
 import topicList from "./lib/topicList.json";
 
 export default function ChannelInfo({ currentChannel }) {
+  const latestVideoId = useSelector((state) => state.youtube.latestVideoId);
   const displayCount = (number) => {
     return new Intl.NumberFormat().format(parseInt(number));
   };
@@ -108,7 +111,9 @@ export default function ChannelInfo({ currentChannel }) {
                         {convertTopicIdsToReadableNames(
                           currentChannel.topics
                         ).map((topic) => (
-                          <li className="topic-item">{topic}</li>
+                          <li key={topic} className="topic-item">
+                            {topic}
+                          </li>
                         ))}
                       </ul>
                     </td>
@@ -116,6 +121,10 @@ export default function ChannelInfo({ currentChannel }) {
                 </tbody>
               </Table>
             </div>
+          </div>
+          <div className="d-flex text-center justify-content-center align-items-center flex-column">
+            <h2>Latest video on this channel</h2>
+            <EmbedYoutubeVideo videoId={latestVideoId} />
           </div>
         </>
       )}

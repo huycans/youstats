@@ -19,7 +19,8 @@ const initialState = {
     topics: [],
     kidsFriendly: false,
     bannerURL: ""
-  }
+  },
+  latestVideoId: ""
 };
 
 //thunk action
@@ -36,9 +37,20 @@ export const fetchYoutubeChannelsByKeyword = createAsyncThunk(
 
 export const fetchYoutubeChannelInfo = createAsyncThunk(
   "youtube/fetchYoutubeChannelInfo",
-  async (channelName, thunkAPI) => {
+  async (channelId, thunkAPI) => {
     try {
-      return await youtubeAPI.fetchYoutubeChannelInfo(channelName);
+      return await youtubeAPI.fetchYoutubeChannelInfo(channelId);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const fetchYoutubePlaylistById = createAsyncThunk(
+  "youtube/fetchYoutubePlaylistById",
+  async (playlistId, thunkAPI) => {
+    try {
+      return await youtubeAPI.fetchYoutubePlaylistById(playlistId);
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);
     }
@@ -92,6 +104,10 @@ export const youtubeSlice = createSlice({
             "brandingSettings.image.bannerExternalUrl"
           )
         };
+      })
+      .addCase(fetchYoutubePlaylistById.fulfilled, (state, action) => {
+        state.latestVideoId =
+          action.payload.items[0].snippet.resourceId.videoId;
       });
   }
 });

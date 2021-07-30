@@ -90,7 +90,6 @@ function App() {
 
         <ChannelSearch />
         <ChannelInfo currentChannel={currentChannel} />
-        <h2>Lastest video</h2>
       </main>
     </div>
   );

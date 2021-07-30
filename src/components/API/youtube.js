@@ -24,7 +24,20 @@ const fetchYoutubeChannelInfo = async (channelId) => {
   return await response.json();
 };
 
+const fetchYoutubePlaylistById = async (playlistId) => {
+  const MAX_RESULT = 1;
+  const params = `?part=snippet%2CcontentDetails&playlistId=${playlistId}&maxResults=${MAX_RESULT}&key=${process.env.REACT_APP_API_KEY}`;
+  const response = await fetch(googleURL.youtubePlaylistItemSearch + params, {
+    method: "GET",
+    headers: {
+      Accept: "application/json"
+    }
+  });
+  return await response.json();
+};
+
 export const youtubeAPI = {
   fetchYoutubeChannelsByKeyword,
-  fetchYoutubeChannelInfo
+  fetchYoutubeChannelInfo,
+  fetchYoutubePlaylistById
 };

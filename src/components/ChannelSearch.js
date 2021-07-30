@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchYoutubeChannelsByKeyword,
-  fetchYoutubeChannelInfo
+  fetchYoutubeChannelInfo,
+  fetchYoutubePlaylistById
 } from "./slices/youtube";
 import { useDebounce } from "./utils";
 
@@ -30,8 +31,9 @@ export default function ChannelSearch() {
     setSearchTerm(event.target.value);
   };
 
-  const handleChannelClick = (e, channelId) => {
+  const handleChannelClick = (e, channelId, playlistId) => {
     dispatch(fetchYoutubeChannelInfo(channelId));
+    dispatch(fetchYoutubePlaylistById(playlistId));
   };
 
   return (
@@ -56,7 +58,13 @@ export default function ChannelSearch() {
                   data-testid="channel-result-items"
                   className="container channel-results-item"
                   key={result.id.channelId}
-                  onClick={(e) => handleChannelClick(e, result.id.channelId)}
+                  onClick={(e) =>
+                    handleChannelClick(
+                      e,
+                      result.id.channelId,
+                      result.contentDetails.relatedPlaylists.uploads
+                    )
+                  }
                 >
                   <div className="row">
                     <div className="col-2">
