@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import classnames from "classnames";
+
 import {
   fetchYoutubeChannelsByKeyword,
   fetchYoutubeChannelInfo,
   fetchYoutubePlaylistById
 } from "./slices/youtube";
+import { collapseSearchSection, expandSearchSection } from "./slices/display";
 import { useDebounce } from "./utils";
 
 export default function ChannelSearch() {
   const debouncedTime = 500;
-  const showChannelResults = useSelector(
-    (state) => state.youtube.showChannelResults
+
+  const shouldExpandSearchSection = useSelector(
+    (state) => state.display.shouldExpandSearchSection
   );
   const channelResults = useSelector((state) => state.youtube.channelResults);
   let [searchTerm, setSearchTerm] = useState("");
@@ -28,31 +32,41 @@ export default function ChannelSearch() {
 
   //handle user typing
   const handleChange = (event) => {
+    dispatch(expandSearchSection());
     setSearchTerm(event.target.value);
   };
 
   const handleChannelClick = (e, channelId, playlistId) => {
+    dispatch(collapseSearchSection());
     dispatch(fetchYoutubeChannelInfo(channelId));
     dispatch(fetchYoutubePlaylistById(playlistId));
   };
 
   return (
-    <>
-      <div className="channel-search">
-        <label htmlFor="channel-search-input">
-          {" "}
-          Search for a channel by name: &nbsp;&nbsp;
-          <input
-            data-testid="channel-search-input"
-            id="channel-search-input"
-            type="text"
-            onChange={handleChange}
-          />
-        </label>
+    <div
+      className={classnames("col-12 channel-search-container", {
+        "col-lg-3": !shouldExpandSearchSection,
+        "col-lg-6": shouldExpandSearchSection
+      })}
+    >
+      <div className="row channel-search">
+        <h3>Search for a youtube channel by name</h3>
+        <input
+          data-testid="channel-search-input"
+          id="channel-search-input"
+          className="channel-search-input"
+          type="text"
+          onChange={handleChange}
+        />
       </div>
-      <ul className="channel-results-lists" data-testid="channel-result-lists">
-        {showChannelResults
-          ? channelResults.map((result, index) => {
+      {channelResults.length > 0 ? (
+        <>
+          <h3>Search results: </h3>
+          <ul
+            className="channel-results-lists"
+            data-testid="channel-result-lists"
+          >
+            {channelResults.map((result, index) => {
               return (
                 <li
                   data-testid="channel-result-items"
@@ -67,7 +81,12 @@ export default function ChannelSearch() {
                   }
                 >
                   <div className="row">
-                    <div className="col-2">
+                    <div
+                      className={classnames({
+                        "col-2": shouldExpandSearchSection,
+                        "col-6": !shouldExpandSearchSection
+                      })}
+                    >
                       <img
                         className="channel-results-logo"
                         alt={result.snippet.thumbnails.title}
@@ -75,23 +94,31 @@ export default function ChannelSearch() {
                         data-testid={"channel-result-items-logo"}
                       />
                     </div>
-                    <div className="col-10">
+                    <div
+                      className={classnames({
+                        "col-10": shouldExpandSearchSection,
+                        "col-6": !shouldExpandSearchSection
+                      })}
+                    >
                       <div
                         className="row channel-title"
                         data-testid={"channel-result-items-title"}
                       >
-                        {result.snippet.channelTitle}
+                        {result.snippet.title}
                       </div>
-                      <div className="row channel-">
-                        {result.snippet.description.slice(0, 80) + "..."}
-                      </div>
+                      {shouldExpandSearchSection ? (
+                        <div className="row channel-">
+                          {result.snippet.description.slice(0, 80) + "..."}
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                 </li>
               );
-            })
-          : null}
-      </ul>
-    </>
+            })}
+          </ul>
+        </>
+      ) : null}
+    </div>
   );
 }

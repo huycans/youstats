@@ -13,3 +13,17 @@
   background: white;
   border: none;
 }
+
+.app-title {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.channel-search-container {
+  transition: all ease 1s;
+}
+
+.current-channel-info-container {
+  transition: all ease 1s;
+  border-left: 1px solid $black;
+}

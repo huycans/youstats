@@ -2,6 +2,23 @@
   padding-left: 0;
 }
 
+.channel-search {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .channel-search-input {
+    width: 80%;
+    margin: 1rem 0;
+    height: 4rem;
+    border-radius: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}
+
 .channel-results-item {
   position: relative;
   font-size: 0.8rem;

@@ -4,7 +4,6 @@ import { youtubeAPI } from "../API/youtube";
 
 const initialState = {
   channelResults: [],
-  showChannelResults: false,
   currentChannel: {
     isEmpty: true,
     title: "",
@@ -66,7 +65,6 @@ export const youtubeSlice = createSlice({
     builder
       .addCase(fetchYoutubeChannelsByKeyword.fulfilled, (state, action) => {
         state.channelResults = action.payload.items;
-        state.showChannelResults = true;
       })
       .addCase(fetchYoutubeChannelInfo.fulfilled, (state, action) => {
         const resultObj = action.payload.items[0];
@@ -81,7 +79,6 @@ export const youtubeSlice = createSlice({
           };
         };
         const getPropertyAtPath = getPropertyFromObjectCurried(resultObj, "");
-        state.showChannelResults = false;
         state.currentChannel = {
           isEmpty: false,
           channelId: getPropertyAtPath("id.channelId"),

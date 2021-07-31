@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { GoogleLogin } from "react-google-login";
 import Spinner from "react-bootstrap/Spinner";
+import classnames from "classnames";
 
 import { signInSuccess, resetAuth } from "./components/slices/auth";
 import NavigationBar from "./components/NavigationBar";
@@ -14,8 +15,8 @@ function App() {
   const dispatch = useDispatch();
 
   //selectors used
-  let googleToken = useSelector((state) => state.auth.tokenId);
-  let currentChannel = useSelector((state) => state.youtube.currentChannel);
+
+  const currentChannel = useSelector((state) => state.youtube.currentChannel);
 
   //states of the app
   // loading state
@@ -38,8 +39,6 @@ function App() {
   };
 
   const handleSignin = (userProfile) => {
-    console.log(userProfile);
-
     setLoading(false);
     const { tokenId, profileObj, tokenObj } = userProfile;
     setSignedin(true);
@@ -59,7 +58,7 @@ function App() {
         handleSignout={handleSignout}
       ></NavigationBar>
       <main className="container">
-        <h1> Welcome to YouStats</h1>
+        <h1 className="app-title"> Welcome to YouStats</h1>
         {loading ? (
           <div className="loading-spinner d-flex justify-content-center align-items-center">
             <Spinner
@@ -73,9 +72,7 @@ function App() {
             </Spinner>
           </div>
         ) : null}
-        {signedin ? (
-          `You are signed in`
-        ) : (
+        {signedin ? null : (
           <GoogleLogin
             data-testid="google-login-btn"
             clientId={process.env.REACT_APP_CLIENTID}
@@ -87,9 +84,10 @@ function App() {
             onAutoLoadFinished={() => setLoading(false)}
           />
         )}
-
-        <ChannelSearch />
-        <ChannelInfo currentChannel={currentChannel} />
+        <div className="row">
+          <ChannelSearch />
+          <ChannelInfo currentChannel={currentChannel} />
+        </div>
       </main>
     </div>
   );
