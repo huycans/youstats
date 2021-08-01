@@ -8,7 +8,7 @@ import youtubeIcon from "../static/images/youtube-icon.png";
 
 export default function NavigationBar({ signedin, handleSignout }) {
   return (
-    <header className="App-header container" data-testid="app-header">
+    <header id="header" className="header container" data-testid="app-header">
       <Navbar expand="md" bg="light" variant="light" data-testid="navbar">
         <Container>
           <Navbar.Brand data-testid="navbar-brand" href="/">

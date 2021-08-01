@@ -2,8 +2,9 @@
 
 exports[`<NavigationBar /> renders correctly 1`] = `
 <header
-  className="App-header container"
+  className="header container"
   data-testid="app-header"
+  id="header"
 >
   <nav
     className="navbar navbar-expand-md navbar-light bg-light"

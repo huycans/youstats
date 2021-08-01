@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { GoogleLogin } from "react-google-login";
 import Spinner from "react-bootstrap/Spinner";
@@ -10,7 +10,7 @@ import NavigationBar from "./components/NavigationBar";
 import "./components/styles/App.scss";
 import ChannelSearch from "./components/ChannelSearch";
 import ChannelInfo from "./components/ChannelInfo";
-
+import Footer from "./components/Footer";
 function App() {
   const dispatch = useDispatch();
 
@@ -57,7 +57,7 @@ function App() {
         signedin={signedin}
         handleSignout={handleSignout}
       ></NavigationBar>
-      <main className="container">
+      <main id="main-content" className="container">
         <h1 className="app-title"> Welcome to YouStats</h1>
         {loading ? (
           <div className="loading-spinner d-flex justify-content-center align-items-center">
@@ -89,6 +89,7 @@ function App() {
           <ChannelInfo currentChannel={currentChannel} />
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
