@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import * as _ from "lodash";
+import _ from "lodash";
 import { youtubeAPI } from "../API/youtube";
 
 const initialState = {
@@ -38,9 +38,17 @@ export const fetchYoutubeChannelInfo = createAsyncThunk(
   "youtube/fetchYoutubeChannelInfo",
   async (channelId, thunkAPI) => {
     try {
-      return await youtubeAPI.fetchYoutubeChannelInfo(channelId);
+      if (channelId) {
+        let response = await youtubeAPI.fetchYoutubeChannelInfo(channelId);
+        thunkAPI.dispatch(
+          fetchYoutubePlaylistById(
+            response.items[0].contentDetails.relatedPlaylists.uploads
+          )
+        );
+        return response;
+      } else throw new Error("No channel found");
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
 );
@@ -49,9 +57,11 @@ export const fetchYoutubePlaylistById = createAsyncThunk(
   "youtube/fetchYoutubePlaylistById",
   async (playlistId, thunkAPI) => {
     try {
-      return await youtubeAPI.fetchYoutubePlaylistById(playlistId);
+      if (playlistId !== "")
+        return await youtubeAPI.fetchYoutubePlaylistById(playlistId);
+      else throw new Error("No playlist found");
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      return thunkAPI.rejectWithValue(err.message);
     }
   }
 );
@@ -66,6 +76,7 @@ export const youtubeSlice = createSlice({
       .addCase(fetchYoutubeChannelsByKeyword.fulfilled, (state, action) => {
         state.channelResults = action.payload.items;
       })
+
       .addCase(fetchYoutubeChannelInfo.fulfilled, (state, action) => {
         const resultObj = action.payload.items[0];
 
@@ -103,8 +114,14 @@ export const youtubeSlice = createSlice({
         };
       })
       .addCase(fetchYoutubePlaylistById.fulfilled, (state, action) => {
-        state.latestVideoId =
-          action.payload.items[0].snippet.resourceId.videoId;
+        state.latestVideoId = _.get(
+          action,
+          "payload.items[0].snippet.resourceId.videoId",
+          0
+        );
+      })
+      .addCase(fetchYoutubePlaylistById.rejected, (state, action) => {
+        state.latestVideoId = "NA";
       });
   }
 });

@@ -36,10 +36,9 @@ export default function ChannelSearch() {
     setSearchTerm(event.target.value);
   };
 
-  const handleChannelClick = (e, channelId, playlistId) => {
+  const handleChannelClick = (e, channelId) => {
     dispatch(collapseSearchSection());
     dispatch(fetchYoutubeChannelInfo(channelId));
-    dispatch(fetchYoutubePlaylistById(playlistId));
   };
 
   return (
@@ -72,13 +71,7 @@ export default function ChannelSearch() {
                   data-testid="channel-result-items"
                   className="container channel-results-item"
                   key={result.id.channelId}
-                  onClick={(e) =>
-                    handleChannelClick(
-                      e,
-                      result.id.channelId,
-                      result.contentDetails.relatedPlaylists.uploads
-                    )
-                  }
+                  onClick={(e) => handleChannelClick(e, result.id.channelId)}
                 >
                   <div className="row">
                     <div

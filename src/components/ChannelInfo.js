@@ -104,12 +104,12 @@ export default function ChannelInfo({ currentChannel }) {
                     <tr>
                       <td>Base country </td>
                       <td>
-                        {
-                          countryCodes.find(
-                            (country) =>
-                              country["alpha-2"] === currentChannel.country
-                          ).name
-                        }
+                        {currentChannel.country !== ""
+                          ? countryCodes.find(
+                              (country) =>
+                                country["alpha-2"] === currentChannel.country
+                            ).name
+                          : ""}
                       </td>
                     </tr>
                     <tr>

@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function EmbedYoutubeVideo({ videoId }) {
-  if (videoId) {
+  if (videoId && videoId != "NA") {
     return (
       <iframe
         width="560"
@@ -13,5 +13,5 @@ export default function EmbedYoutubeVideo({ videoId }) {
         allowFullScreen
       ></iframe>
     );
-  } else return null;
+  } else return "No video found for this channel";
 }
