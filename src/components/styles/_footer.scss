@@ -1,7 +1,10 @@
 .footer {
   background-color: $gray-300;
-  height: 150px;
   h5 {
     font-weight: bold;
+  }
+
+  @media (min-width: 768px) {
+    height: 150px;
   }
 }
