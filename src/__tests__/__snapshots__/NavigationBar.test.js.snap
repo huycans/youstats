@@ -50,7 +50,7 @@ exports[`<NavigationBar /> renders correctly 1`] = `
           className="nav-item"
         >
           <button
-            className="signout-btn"
+            className="auth-btn"
             data-testid="navbar-item-logout-btn"
             disabled={true}
             onClick={[Function]}
