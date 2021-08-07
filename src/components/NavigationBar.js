@@ -56,7 +56,7 @@ export default function NavigationBar({
                   clientId={process.env.REACT_APP_CLIENTID}
                   buttonText="Sign in with Google"
                   onSuccess={handleSignin}
-                  onFailure={handleSignin}
+                  onFailure={() => {}}
                   cookiePolicy={"single_host_origin"}
                   isSignedIn={true}
                   onAutoLoadFinished={() => setLoading(false)}
