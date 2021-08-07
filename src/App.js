@@ -16,13 +16,14 @@ function App() {
   const currentChannel = useSelector((state) => state.youtube.currentChannel);
 
   let [signedin, setSignedin] = useState(false);
-  let [loading, setLoading] = useState(() => {
-    //check if there's already google auth object in cookie and set loading accordingly
-    if (document.cookie.indexOf("G_AUTHUSER_H") != -1) {
-      return true;
-    }
-    return false;
-  });
+  let [loading, setLoading] = useState(false);
+  // let [loading, setLoading] = useState(() => {
+  //   //check if there's already google auth object in cookie and set loading accordingly
+  //   if (document.cookie.indexOf("G_AUTHUSER_H") != -1) {
+  //     return true;
+  //   }
+  //   return false;
+  // });
 
   /**
    * Reset all the states in the app to default values and remove any token in localstorage
