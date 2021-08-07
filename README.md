@@ -9,6 +9,8 @@ Simple React app that allows you to search for a youtube channel and see its bas
 3. Run "npm start"
 4. Enjoy
 
+[Live demo](https://youstats-react.herokuapp.com/)
+
 # Library used
 
 1. React+Redux
