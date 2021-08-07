@@ -75,7 +75,7 @@ function App() {
           <ChannelInfo currentChannel={currentChannel} />
         </div>
       </main>
-      <Footer />
+      <Footer signedin={signedin} loading={loading} />
     </div>
   );
 }
