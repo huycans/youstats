@@ -66,17 +66,28 @@ export default function Footer() {
         <h5>You can find me at</h5>
         <ul>
           <li>
-            <a href="https://github.com/huycans">
+            <a
+              data-testid="footer-contact-link"
+              href="https://github.com/huycans"
+            >
               <FontAwesomeIcon icon={faGithub} />
             </a>
           </li>
           <li>
-            <a href="mailto:h.tvuong07@gmail.com">
+            <a
+              data-testid="footer-contact-link"
+              href="mailto:h.tvuong07@gmail.com"
+            >
               <FontAwesomeIcon icon={faEnvelope} />
             </a>
           </li>
           <li>
-            <a href="https://huycans.github.io/">My personal site</a>
+            <a
+              data-testid="footer-contact-link"
+              href="https://huycans.github.io/"
+            >
+              My personal site
+            </a>
           </li>
         </ul>
       </div>

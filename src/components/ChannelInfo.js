@@ -47,6 +47,7 @@ export default function ChannelInfo({ currentChannel }) {
             <div className="row">
               <Image
                 rounded
+                data-testid="current-channel-banner"
                 className="current-channel-banner"
                 alt="current channel banner"
                 src={currentChannel.bannerURL}
@@ -62,6 +63,7 @@ export default function ChannelInfo({ currentChannel }) {
                   <Image
                     roundedCircle
                     className="current-channel-thumbnail"
+                    data-testid="current-channel-thumbnail"
                     alt="current channel thumbnail"
                     src={currentChannel.thumbnailBig}
                   />
@@ -73,6 +75,7 @@ export default function ChannelInfo({ currentChannel }) {
                       target="_blank"
                       rel="noopener noreferrer"
                       href={linkToYoutubeChannel}
+                      data-testid="current-channel-title"
                     >
                       {currentChannel.title}
                     </a>
