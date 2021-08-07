@@ -7,10 +7,12 @@ import store from "./components/store";
 
 import reportWebVitals from "./reportWebVitals";
 
+// Youtube API call mock up
 if (process.env.NODE_ENV === "development") {
   const { worker } = require("./mocks/browser");
   worker.start();
 }
+// END Youtube API call mock up
 
 ReactDOM.render(
   <React.StrictMode>
